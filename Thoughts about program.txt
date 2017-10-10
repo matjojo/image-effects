@@ -19,3 +19,14 @@ DOES NOT WORK:
 the comparison is the only one that has to do with the image size, and the time it takes seems to be higher for a bigger image, so that is the bottleneck 
 	we could halve the image size and compare then?
 		image conversion takes longer than image compare anyway
+
+
+PROFILING:
+
+kernprof -l convert.py image.png 2000 5 output_profile.png
+
+see results:
+
+python -m line_profiler convert.py.lprof
+
+: https://github.com/rkern/line_profiler :
