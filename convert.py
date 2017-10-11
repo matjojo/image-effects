@@ -55,6 +55,11 @@ def main():
 		polydraw(image1)
 
 		# compare them to source (img)
+
+		# this is what takes the most time, maybe by spawning two subprocceses can we double the speed
+
+		compareQueue = Queue.Queue(maxsize=2) # two comparisons , two threads
+
 		a = compare(img, image1)
 		b = compare(img, image2)
 
