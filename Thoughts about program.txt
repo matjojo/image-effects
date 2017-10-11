@@ -1,13 +1,14 @@
 why random, just determine what should be done in a x*z grid and apply a dot with and y size somewhere in there
 
-
-
 make gif, directly in PILLOW? see the possibillities for PILLOW online
-
 
 write this to c using the ideas from the anons on 4ch /g/
 
 Multi threaded by not actyally applying the new pixels but saving them in a table and adding them to the picture later
+
+Snip image to a smaller image for comparing, worth it?
+
+
 
 
 MAKE LINES INSTEAD OF DOTS FOR IMPROVED VISUALS YEAH BOI
@@ -20,9 +21,21 @@ the comparison is the only one that has to do with the image size, and the time 
 	we could halve the image size and compare then?
 		image conversion takes longer than image compare anyway
 
+Make threads once
+	Does not work since a thread can only be started once, it really is a one function thing
+
 
 PROFILING:
 
-pprofile --exclude-syspath -o pprofileOUT.txt some_python_executable.py argv
+kernprof -l convert.py img_FRZ.jpg 2000 5 pprofile_FRZ_2K_5.png
 
-https://github.com/vpelletier/pprofile
+to see results:
+
+python -m line_profiler convert.py.lprof
+
+
+or at once:
+
+kernprof -l convert.py image.png 2000 5 profile_2K_5.png && python -m line_profiler convert.py.lprof
+
+https://github.com/rkern/line_profiler
