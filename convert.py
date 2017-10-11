@@ -7,7 +7,6 @@ except:
 	print("Python Image Library not found, install it with `pip install Pillow`")
 	exit(1)
 
-@profile
 def main():
 	sys.argv += [False]*4
 
@@ -28,7 +27,6 @@ def main():
 
 	r = int(sys.argv[3] or 25)
 
-	@profile
 	def polydraw(image):
 		# get random x and y within image
 		x = random.randint(0, img.size[0]-1)
@@ -37,8 +35,7 @@ def main():
 		# draw within the image using a color from unique set
 		draw = ImageDraw.Draw(image)
 		draw.ellipse((x-r, y-r, x+r, y+r), fill=random.choice(colors))
-	
-	@profile
+
 	def compare(im1, im2, threadID, result_queue):
 		# uses root mean squared analysis
 		# see http://code.activestate.com/recipes/577630-comparing-two-images/
@@ -60,7 +57,7 @@ def main():
 
 		compareQueue = queue.Queue(maxsize=2) # two comparisons , two threads
 		threads = [threading.Thread(target=compare, args=(img, image1, 0, compareQueue)), threading.Thread(target=compare, args=(img, image2, 1, compareQueue))]
-		for th in threads:
+		for th in threads:	# maybe we can make the threads once, since the input variables change, but the names of them not.
 			th.daemon = True
 			th.start()
 		

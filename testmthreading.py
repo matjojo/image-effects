@@ -2,7 +2,6 @@ import queue    # For Python 2.x use 'import Queue as queue'
 import threading, time, random
 
 
-# @profile
 def func(id, result_queue):
     print("Thread", id)
     slptime = random.random() * 5
@@ -10,7 +9,6 @@ def func(id, result_queue):
     print("Thread ", id, " slept", slptime, " time" )
     result_queue.put((id, 'done', slptime))
 
-# @profile
 def main():
     q = queue.Queue()
     threads = [threading.Thread(target=func, args=(0, q)), threading.Thread(target=func, args=(1,q))]

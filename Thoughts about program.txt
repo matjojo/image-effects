@@ -23,10 +23,6 @@ the comparison is the only one that has to do with the image size, and the time 
 
 PROFILING:
 
-kernprof -l convert.py image.png 2000 5 output_profile.png
+pprofile --exclude-syspath -o pprofileOUT.txt some_python_executable.py argv
 
-see results:
-
-python -m line_profiler convert.py.lprof
-
-: https://github.com/rkern/line_profiler :
+https://github.com/vpelletier/pprofile
