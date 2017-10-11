@@ -1,5 +1,5 @@
 #!/bin/python
-import sys, random, math, operator, queue, threading
+import sys, random, math, operator
 
 try:
 	from PIL import Image, ImageChops, ImageDraw
@@ -12,7 +12,7 @@ def main():
 	sys.argv += [False]*4
 
 	if not sys.argv[1]:
-		print("Usage: python convert.py [image filename] [iterations] [circle radius] [output filename]")
+		print("Usage: python convert.py image.png [iterations] [circle radius] [output filename]")
 		exit(1)
 
 	# open image
@@ -39,7 +39,7 @@ def main():
 		draw.ellipse((x-r, y-r, x+r, y+r), fill=random.choice(colors))
 	
 	@profile
-	def compare(im1, im2, threadID, result_queue):
+	def compare(im1, im2):
 		# uses root mean squared analysis
 		# see http://code.activestate.com/recipes/577630-comparing-two-images/
 		diff = ImageChops.difference(im1, im2)
@@ -47,7 +47,7 @@ def main():
 		sq = (value*(idx**2) for idx, value in enumerate(h))
 		sum_of_squares = sum(sq)
 		rms = math.sqrt(sum_of_squares/float(im1.size[0] * im1.size[1]))
-		result_queue.put((threadID, rms))
+		return rms
 
 	rounds = int(sys.argv[2] or 2500)
 	for x in range(rounds):
@@ -55,27 +55,8 @@ def main():
 		polydraw(image1)
 
 		# compare them to source (img)
-
-		# this is what takes the most time, maybe by spawning two subprocceses can we double the speed
-
-		compareQueue = queue.Queue(maxsize=2) # two comparisons , two threads
-		threads = [threading.Thread(target=compare, args=(img, image1, 0, compareQueue)), threading.Thread(target=compare, args=(img, image2, 1, compareQueue))]
-		for th in threads:
-			th.daemon = True
-			th.start()
-		
-		results = [0, 0]
-		results[0] = compareQueue.get()
-		results[1] = compareQueue.get()
-
-
-		resultssorted = [0, 0]
-		resultssorted[results[0][0]] = results[0][1] # we sort the results by making use of the fact that the first [0] slot in the table is the threadID, this ID we then use to determine
-		resultssorted[results[1][0]] = results[1][1] # the spot it gets in the sorted table, thus making sure that the first [0] slot in that table is the one from the first [0] thread
-
-
-		a = resultssorted[0]
-		b = resultssorted[1]
+		a = compare(img, image1)
+		b = compare(img, image2)
 
 		# if image1 is more similar, copy it to image2
 		if a <= b:
@@ -92,4 +73,4 @@ def main():
 	print("Done, resulting image saved to %s" % filename)
 
 if __name__ == "__main__":
-	main()
+    main()
