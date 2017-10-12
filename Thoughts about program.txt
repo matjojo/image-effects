@@ -6,9 +6,9 @@ write this to c using the ideas from the anons on 4ch /g/
 
 Multi threaded by not actyally applying the new pixels but saving them in a table and adding them to the picture later
 
-
 place four or five dots per time, and see for all of them whether or not it improves the image, place all of them that are okay
 
+it looks like one comparison per run is a duplicate of one comparison made last time, this could be improved, could double speed
 
 MAKE LINES INSTEAD OF DOTS FOR IMPROVED VISUALS YEAH BOI
 
