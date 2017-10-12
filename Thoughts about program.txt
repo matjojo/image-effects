@@ -6,7 +6,6 @@ write this to c using the ideas from the anons on 4ch /g/
 
 Multi threaded by not actyally applying the new pixels but saving them in a table and adding them to the picture later
 
-Snip image to a smaller image for comparing, worth it?
 
 place four or five dots per time, and see for all of them whether or not it improves the image, place all of them that are okay
 
@@ -17,8 +16,9 @@ MAKE LINES INSTEAD OF DOTS FOR IMPROVED VISUALS YEAH BOI
 
 DOES NOT WORK:
 
-the comparison is the only one that has to do with the image size, and the time it takes seems to be higher for a bigger image, so that is the bottleneck 
+-the comparison is the only one that has to do with the image size, and the time it takes seems to be higher for a bigger image, so that is the bottleneck 
 	we could halve the image size and compare then?
+-Snip image to a smaller image for comparing, worth it?
 		image conversion takes longer than image compare anyway
 
 Make threads once
