@@ -1,12 +1,15 @@
 #!/bin/python
 import sys, random, math, operator, queue, threading
-
+from datetime import datetime
 try:
 	from PIL import Image, ImageChops, ImageDraw
 except:
 	print("Python Image Library not found, install it with `pip install Pillow`")
 	exit(1)
-@profile
+
+print(str(datetime.now()))
+
+#@profile
 def main():
 	sys.argv += [False]*4
 
@@ -27,16 +30,17 @@ def main():
 
 	r = int(sys.argv[3] or 25)
 
-	@profile
+#	@profile
 	def polydraw(image):
 		# get random x and y within image
 		x = random.randint(0, img.size[0]-1)
 		y = random.randint(0, img.size[1]-1)
 
 		# draw within the image using a color from unique set
-		ImageDraw.Draw(image).ellipse((x-r, y-r, x+r, y+r), fill=random.choice(colors)) # after maybe split out the random and see if that can be made faster
+		colour = random.choice(colors)
+		ImageDraw.Draw(image).ellipse((x-r, y-r, x+r, y+r), fill=colour) # after maybe split out the random and see if that can be made faster
 
-	@profile
+#	@profile
 	def compare(im1, im2, threadID, result_queue):
 		# uses root mean squared analysis
 		# see http://code.activestate.com/recipes/577630-comparing-two-images/
@@ -53,22 +57,19 @@ def main():
 		polydraw(image1)
 
 		# compare them to source (img)
-
-		# this is what takes the most time, maybe by spawning two subprocceses can we double the speed
-
 		compareQueue = queue.Queue(maxsize=2) # two comparisons , two threads
 		threads = [threading.Thread(target=compare, args=(img, image1, 0, compareQueue), daemon=True), threading.Thread(target=compare, args=(img, image2, 1, compareQueue), daemon=True)]
 		
 		for th in threads:
 			th.start()
 		
-		results = [0, 0]
-		results[0] = compareQueue.get()
-													# micro-optimization, since we are waiting anyway, why not write the results for the first one and print already
 		# report progress every 100 iterations
 		if x % 100 == 0 and x != 0:
 			print("%d/%d iterations performed, %.02f%% done" % (x, rounds, round(float(x)/rounds*100)))
-
+													# micro-optimization, since we are waiting anyway, why not write the results for the first one and print already		
+		results = [0, 0]
+		results[0] = compareQueue.get()
+		
 		resultssorted = [0, 0]
 		resultssorted[results[0][0]] = results[0][1] # we sort the results by making use of the fact that the first [0] slot in the table is the threadID, this ID we then use to determine
 

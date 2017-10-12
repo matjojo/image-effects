@@ -8,7 +8,7 @@ Multi threaded by not actyally applying the new pixels but saving them in a tabl
 
 Snip image to a smaller image for comparing, worth it?
 
-
+place four or five dots per time, and see for all of them whether or not it improves the image, place all of them that are okay
 
 
 MAKE LINES INSTEAD OF DOTS FOR IMPROVED VISUALS YEAH BOI
