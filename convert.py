@@ -9,8 +9,9 @@ except:
 
 print(str(datetime.now()))
 
-#@profile
+@profile
 def main():
+	lastcompareresult = False
 	sys.argv += [False]*4
 
 	if not sys.argv[1]:
@@ -30,7 +31,7 @@ def main():
 
 	r = int(sys.argv[3] or 25)
 
-#	@profile
+	@profile
 	def polydraw(image):
 		# get random x and y within image
 		x = random.randint(0, img.size[0]-1)
@@ -40,8 +41,8 @@ def main():
 		colour = random.choice(colors)
 		ImageDraw.Draw(image).ellipse((x-r, y-r, x+r, y+r), fill=colour) # after maybe split out the random and see if that can be made faster
 
-#	@profile
-	def compare(im1, im2, threadID, result_queue):
+	@profile
+	def compare(im1, im2):
 		# uses root mean squared analysis
 		# see http://code.activestate.com/recipes/577630-comparing-two-images/
 		diff = ImageChops.difference(im1, im2)
@@ -49,43 +50,31 @@ def main():
 		sq = (value*(idx**2) for idx, value in enumerate(h))
 		sum_of_squares = sum(sq)
 		rms = math.sqrt(sum_of_squares/float(im1.size[0] * im1.size[1]))
-		result_queue.put((threadID, rms))
+		return rms
 
 	rounds = int(sys.argv[2] or 2500)
 	for x in range(rounds):
 		# draw a random polygon in image1
 		polydraw(image1)
 
+
 		# compare them to source (img)
-		compareQueue = queue.Queue(maxsize=2) # two comparisons , two threads
-		threads = [threading.Thread(target=compare, args=(img, image1, 0, compareQueue), daemon=True), threading.Thread(target=compare, args=(img, image2, 1, compareQueue), daemon=True)]
-		
-		for th in threads:
-			th.start()
-		
-		# report progress every 100 iterations
-		if x % 100 == 0 and x != 0:
-			print("%d/%d iterations performed, %.02f%% done" % (x, rounds, round(float(x)/rounds*100)))
-													# micro-optimization, since we are waiting anyway, why not write the results for the first one and print already		
-		results = [0, 0]
-		results[0] = compareQueue.get()
-		
-		resultssorted = [0, 0]
-		resultssorted[results[0][0]] = results[0][1] # we sort the results by making use of the fact that the first [0] slot in the table is the threadID, this ID we then use to determine
-
-		results[1] = compareQueue.get()
-		resultssorted[results[1][0]] = results[1][1] # the spot it gets in the sorted table, thus making sure that the first [0] slot in that table is the one from the first [0] thread
-
-
-		a = resultssorted[0]
-		b = resultssorted[1]
+		a = compare(img, image1) 	# comparison this time
+		if not lastcompareresult:
+			lastcompareresult = a+1
+		b = lastcompareresult		# comparison last time
 
 		# if image1 is more similar, copy it to image2
 		if a <= b:
 			image2 = image1.copy()
+			lastcompareresult = a
 		else:
 			image1 = image2.copy()
+			lastcompareresult = b
 
+		# report progress every 100 iterations
+		if x % 100 == 0 and x != 0:
+			print("%d/%d iterations performed, %.02f%% done" % (x, rounds, round(float(x)/rounds*100)))		
 
 
 	filename = sys.argv[4] or str("output_" + str(rounds) + "_" + str(r) + ".png")

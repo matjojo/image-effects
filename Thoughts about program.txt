@@ -34,7 +34,7 @@ to see results:
 python -m line_profiler convert.py.lprof
 
 
-or at once:
+or at once: REMEMBER TO UNCOMMENT THE @PROFILE TAGS YOU DUMB FUCK JEEZ!
 
 kernprof -l convert.py image.png 2000 5 profile_2K_5.png && python -m line_profiler convert.py.lprof
 
