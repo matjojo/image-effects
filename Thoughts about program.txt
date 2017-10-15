@@ -2,15 +2,21 @@ why random, just determine what should be done in a x*z grid and apply a dot wit
 
 make gif, directly in PILLOW? see the possibillities for PILLOW online
 
-write this to c using the ideas from the anons on 4ch /g/
-
 Multi threaded by not actyally applying the new pixels but saving them in a table and adding them to the picture later
 
 place four or five dots per time, and see for all of them whether or not it improves the image, place all of them that are okay
 
 it looks like one comparison per run is a duplicate of one comparison made last time, this could be improved, could double speed
 
-MAKE LINES INSTEAD OF DOTS FOR IMPROVED VISUALS YEAH BOI
+add a base image, should be really easy, but think about image dimensions
+
+
+
+
+
+DONE:
+
+MAKE LINES INSTEAD OF DOTS FOR IMPROVED VISUALS YEAH BOIs
 
 
 
@@ -27,7 +33,7 @@ Make threads once
 
 PROFILING:
 
-kernprof -l convert.py img_FRZ.jpg 2000 5 pprofile_FRZ_2K_5.png
+kernprof -l convert.py image.png image_out_profile.png 2000 line 5 10 2
 
 to see results:
 
@@ -36,6 +42,6 @@ python -m line_profiler convert.py.lprof
 
 or at once: REMEMBER TO UNCOMMENT THE @PROFILE TAGS YOU DUMB FUCK JEEZ!
 
-kernprof -l convert.py image.png 2000 5 profile_2K_5.png && python -m line_profiler convert.py.lprof
+kernprof -l convert.py image.png image_out_profile.png 2000 line 5 10 2 && python -m line_profiler convert.py.lprof
 
 https://github.com/rkern/line_profiler
