@@ -13,10 +13,10 @@ print(timestart)
 #@profile
 def main():
 	lastcompareresult = False
-	sys.argv += [False]*5
+	sys.argv += [False]*10
 
 	if not sys.argv[1]:
-		print("Usage: python convert.py [image filename] [output filename] [iterations] [shape ('line', 'ellipse', 'pieslice')] [line length minimum or ellipse radius] [line length maximum] [line width] ")
+		print("Usage: python convert.py [image filename] [output filename] [iterations] [shape ('line', 'ellipse', 'pieslice')] [line length minimum or ellipse radius] [line length maximum] [line width] [optional: starter image] ")
 		exit(1)
 
 	# open image
@@ -26,9 +26,13 @@ def main():
 	# get unique pixel colors
 	colors = list(set(img.getdata()))
 
-	# make two new images
-	image1 = Image.new(img.mode, img.size, "white")
-	image2 = Image.new(img.mode, img.size, "white")
+	if not sys.argv[8]:
+		# make two new images
+		image1 = Image.new(img.mode, img.size, "white")
+		image2 = Image.new(img.mode, img.size, "white")
+	else:
+		image1 = Image.open(sys.argv[8])
+		image2 = image1.copy()
 
 	lilengthmin_or_elli_rad = int(sys.argv[5] or 1)
 	lilengthmax = int(sys.argv[6] or 5)
@@ -43,7 +47,7 @@ def main():
 
 			# draw within the image using a color from unique set
 			colour = random.choice(colors)
-			ImageDraw.Draw(image).ellipse((x-lilengthmin_or_elli_rad, y-lilengthmin_or_elli_rad, x, y), fill=colour)
+			ImageDraw.Draw(image).ellipse((x1-lilengthmin_or_elli_rad, y1-lilengthmin_or_elli_rad, x1, y1), fill=colour)
 
 	elif sys.argv[4] == "line":
 #		@profile
@@ -99,7 +103,10 @@ def main():
 			print("%d/%d iterations performed, %.02f%% done" % (x, rounds, round(float(x)/rounds*100)))		
 
 
-	filename = sys.argv[2] or str("output_" + str(rounds) + "_" + str(r) + ".png")
+	if (filename == ("automatic")): # make this into a loop
+		filename = str("output_" + sys.argv[1] + "_" + sys.argv[2] + "_" + sys.argv[3] + "_" + sys.argv[4] + "_" + sys.argv[5] + "_" + sys.argv[6] + "_" + sys.argv[7] + "_" + sys.argv[8] + ".png")
+	else:
+		filename = sys.argv[2]
 	image1.save(filename)
 	print("Done, resulting image saved to %s" % filename)
 	print("Starting time was: %s" % timestart)
