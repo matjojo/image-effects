@@ -103,7 +103,7 @@ def main():
 			print("%d/%d iterations performed, %.02f%% done" % (x, rounds, round(float(x)/rounds*100)))		
 
 
-	if (filename == ("automatic")): # make this into a loop
+	if (sys.argv[2] == ("automatic")): # make this into a loop
 		filename = str("output_" + sys.argv[1] + "_" + sys.argv[2] + "_" + sys.argv[3] + "_" + sys.argv[4] + "_" + sys.argv[5] + "_" + sys.argv[6] + "_" + sys.argv[7] + "_" + sys.argv[8] + ".png")
 	else:
 		filename = sys.argv[2]
